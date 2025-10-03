@@ -1,0 +1,127 @@
+<div class="analytics-container">
+  <h2>Feedback Analytics Dashboard</h2>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>Loading analytics...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Analytics Content -->
+  <div *ngIf="!loading && !error && analytics" class="analytics-content">
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="summary-card">
+        <h3>Total Feedback</h3>
+        <div class="summary-value">{{ analytics.totalFeedbackCount }}</div>
+      </div>
+      <div class="summary-card">
+        <h3>Average Rating</h3>
+        <div class="summary-value">{{ formatRating(analytics.averageRating) }}</div>
+      </div>
+      <div class="summary-card">
+        <h3>5-Star Reviews</h3>
+        <div class="summary-value">{{ analytics.fiveStarCount }}</div>
+      </div>
+      <div class="summary-card">
+        <h3>Response Rate</h3>
+        <div class="summary-value">{{ getResponseRate() }}%</div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+      <div class="chart-container">
+        <h3>Rating Distribution</h3>
+        <div class="chart-placeholder">
+          <div *ngFor="let item of ratingDistribution" class="chart-bar">
+            <div class="bar-label">{{ item.name }}</div>
+            <div class="bar-container">
+              <div class="bar" [style.width.%]="getPercentage(item.value)" [style.background-color]="getBarColor(item.name)">
+                <span class="bar-value">{{ item.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <h3>Feedback by Category</h3>
+        <div class="chart-placeholder">
+          <div *ngFor="let item of categoryDistribution" class="chart-bar">
+            <div class="bar-label">{{ item.name }}</div>
+            <div class="bar-container">
+              <div class="bar" [style.width.%]="getPercentage(item.value)" [style.background-color]="getRandomColor()">
+                <span class="bar-value">{{ item.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Rated Entities -->
+    <div class="top-rated-section">
+      <div class="top-rated-container">
+        <h3>Top Rated Students</h3>
+        <div *ngIf="getTopRatedStudents().length === 0" class="no-data">
+          <p>No student ratings available</p>
+        </div>
+        <div *ngFor="let student of getTopRatedStudents()" class="top-rated-item">
+          <div class="entity-name">{{ student.name }}</div>
+          <div class="entity-rating" [style.color]="getRatingColor(student.averageRating)">
+            {{ getRatingStars(student.averageRating) }} ({{ formatRating(student.averageRating) }})
+          </div>
+          <div class="entity-count">{{ student.feedbackCount }} reviews</div>
+        </div>
+      </div>
+
+      <div class="top-rated-container">
+        <h3>Top Rated Companies</h3>
+        <div *ngIf="getTopRatedCompanies().length === 0" class="no-data">
+          <p>No company ratings available</p>
+        </div>
+        <div *ngFor="let company of getTopRatedCompanies()" class="top-rated-item">
+          <div class="entity-name">{{ company.name }}</div>
+          <div class="entity-rating" [style.color]="getRatingColor(company.averageRating)">
+            {{ getRatingStars(company.averageRating) }} ({{ formatRating(company.averageRating) }})
+          </div>
+          <div class="entity-count">{{ company.feedbackCount }} reviews</div>
+        </div>
+      </div>
+
+      <div class="top-rated-container">
+        <h3>Top Rated Courses</h3>
+        <div *ngIf="getTopRatedCourses().length === 0" class="no-data">
+          <p>No course ratings available</p>
+        </div>
+        <div *ngFor="let course of getTopRatedCourses()" class="top-rated-item">
+          <div class="entity-name">{{ course.name }}</div>
+          <div class="entity-rating" [style.color]="getRatingColor(course.averageRating)">
+            {{ getRatingStars(course.averageRating) }} ({{ formatRating(course.averageRating) }})
+          </div>
+          <div class="entity-count">{{ course.feedbackCount }} reviews</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Trends -->
+    <div class="trends-section">
+      <h3>Monthly Feedback Trends</h3>
+      <div class="trends-container">
+        <div *ngFor="let trend of monthlyTrends" class="trend-item">
+          <div class="trend-month">{{ formatMonth(trend.name) }}</div>
+          <div class="trend-bar">
+            <div class="trend-fill" [style.width.%]="getTrendPercentage(trend.value)">
+              <span class="trend-value">{{ trend.value }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

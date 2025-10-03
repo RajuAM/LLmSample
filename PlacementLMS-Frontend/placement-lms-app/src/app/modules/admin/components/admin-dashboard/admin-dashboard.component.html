@@ -1,0 +1,87 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <p>Welcome to the Placement LMS Administration Panel</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa fa-users"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ dashboardStats.totalUsers }}</h3>
+        <p>Total Users</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa fa-user-tag"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ dashboardStats.totalRoles }}</h3>
+        <p>Total Roles</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa fa-key"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ dashboardStats.totalPermissions }}</h3>
+        <p>Total Permissions</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa fa-folder"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ dashboardStats.totalCourseGroups }}</h3>
+        <p>Course Groups</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="recent-activities">
+      <h2>Recent Activities</h2>
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let activity of recentActivities">
+          <div class="activity-icon">
+            <i class="fa fa-circle"></i>
+          </div>
+          <div class="activity-content">
+            <p>{{ activity.description }}</p>
+            <small>{{ activity.timestamp | date:'short' }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="action-buttons">
+        <button class="btn btn-primary" routerLink="/admin/users">
+          <i class="fa fa-user-plus"></i>
+          Add New User
+        </button>
+        <button class="btn btn-secondary" routerLink="/admin/roles">
+          <i class="fa fa-plus"></i>
+          Create Role
+        </button>
+        <button class="btn btn-info" routerLink="/admin/permissions">
+          <i class="fa fa-key"></i>
+          Manage Permissions
+        </button>
+        <button class="btn btn-success" routerLink="/admin/course-groups">
+          <i class="fa fa-folder-plus"></i>
+          Add Course Group
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

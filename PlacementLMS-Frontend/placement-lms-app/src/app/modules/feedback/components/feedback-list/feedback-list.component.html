@@ -1,0 +1,108 @@
+<div class="feedback-container">
+  <h2>Feedback Management</h2>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <h3>Filters</h3>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label for="feedbackType">Feedback Type:</label>
+        <select id="feedbackType" [(ngModel)]="filters.feedbackType" (change)="onFilterChange()">
+          <option value="">All Types</option>
+          <option *ngFor="let type of feedbackTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="category">Category:</label>
+        <select id="category" [(ngModel)]="filters.category" (change)="onFilterChange()">
+          <option value="">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="rating">Rating:</label>
+        <select id="rating" [(ngModel)]="filters.rating" (change)="onFilterChange()">
+          <option value="">All Ratings</option>
+          <option [value]="5">5 Stars</option>
+          <option [value]="4">4 Stars</option>
+          <option [value]="3">3 Stars</option>
+          <option [value]="2">2 Stars</option>
+          <option [value]="1">1 Star</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="dateFrom">From Date:</label>
+        <input type="date" id="dateFrom" [(ngModel)]="filters.dateFrom" (change)="onFilterChange()">
+      </div>
+
+      <div class="filter-group">
+        <label for="dateTo">To Date:</label>
+        <input type="date" id="dateTo" [(ngModel)]="filters.dateTo" (change)="onFilterChange()">
+      </div>
+
+      <div class="filter-group">
+        <button type="button" class="btn-clear" (click)="clearFilters()">Clear Filters</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>Loading feedback...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Feedback List -->
+  <div *ngIf="!loading && !error" class="feedback-list">
+    <div *ngIf="filteredFeedbacks.length === 0" class="no-feedback">
+      <p>No feedback found.</p>
+    </div>
+
+    <div *ngFor="let feedback of filteredFeedbacks" class="feedback-card">
+      <div class="feedback-header">
+        <div class="feedback-type">{{ feedback.feedbackType }}</div>
+        <div class="feedback-rating" [style.color]="getRatingColor(feedback.rating)">
+          {{ getRatingStars(feedback.rating) }} ({{ feedback.rating }}/5)
+        </div>
+      </div>
+
+      <div class="feedback-content">
+        <div class="feedback-meta">
+          <span class="category">{{ feedback.category }}</span>
+          <span class="date">{{ formatDate(feedback.createdAt) }}</span>
+          <span *ngIf="feedback.isAnonymous" class="anonymous">Anonymous</span>
+        </div>
+
+        <div class="feedback-text">
+          <p>{{ feedback.comments }}</p>
+        </div>
+
+        <div *ngIf="feedback.strengths" class="feedback-section">
+          <strong>Strengths:</strong>
+          <p>{{ feedback.strengths }}</p>
+        </div>
+
+        <div *ngIf="feedback.areasForImprovement" class="feedback-section">
+          <strong>Areas for Improvement:</strong>
+          <p>{{ feedback.areasForImprovement }}</p>
+        </div>
+
+        <div class="feedback-author">
+          <span *ngIf="!feedback.isAnonymous">By: {{ feedback.fromUserName }}</span>
+        </div>
+      </div>
+
+      <div class="feedback-actions">
+        <button class="btn-edit" (click)="editFeedback(feedback.id)">Edit</button>
+        <button class="btn-delete" (click)="deleteFeedback(feedback.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

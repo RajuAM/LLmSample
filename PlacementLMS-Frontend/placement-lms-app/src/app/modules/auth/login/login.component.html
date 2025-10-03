@@ -1,0 +1,149 @@
+<!-- Login Component -->
+<div class="container-fluid">
+  <div class="row min-vh-100 justify-content-center align-items-center bg-light">
+    <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-12">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-body p-5">
+          <!-- Header -->
+          <div class="text-center mb-4">
+            <div class="login-logo mb-3">
+              <i class="fas fa-graduation-cap fa-3x text-primary"></i>
+            </div>
+            <h2 class="fw-bold text-primary">Welcome Back</h2>
+            <p class="text-muted">Sign in to your PlacementLMS account</p>
+          </div>
+
+          <!-- Login Form -->
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Email Field -->
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">
+                <i class="fas fa-envelope me-2 text-primary"></i>Email Address
+              </label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-envelope text-muted"></i>
+                </span>
+                <input
+                  type="email"
+                  class="form-control border-start-0"
+                  id="email"
+                  formControlName="email"
+                  placeholder="Enter your email"
+                  [class.is-invalid]="isFieldInvalid('email')"
+                  autocomplete="email">
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+                  {{ getFieldErrorMessage('email') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="form-label fw-semibold">
+                <i class="fas fa-lock me-2 text-primary"></i>Password
+              </label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-lock text-muted"></i>
+                </span>
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control border-start-0 border-end-0"
+                  id="password"
+                  formControlName="password"
+                  placeholder="Enter your password"
+                  [class.is-invalid]="isFieldInvalid('password')"
+                  autocomplete="current-password">
+                <button
+                  class="btn btn-outline-light border-start-0 border"
+                  type="button"
+                  (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+                  <i class="fas" [class]="showPassword ? 'fa-eye-slash' : 'fa-eye'" [class.text-muted]="!showPassword"></i>
+                </button>
+                <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+                  {{ getFieldErrorMessage('password') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="rememberMe">
+                <label class="form-check-label text-muted" for="rememberMe">
+                  Remember me
+                </label>
+              </div>
+              <a href="#" class="text-decoration-none" (click)="goToForgotPassword()">
+                <small class="text-primary">Forgot password?</small>
+              </a>
+            </div>
+
+            <!-- Error Message -->
+            <div class="alert alert-danger" role="alert" *ngIf="error$ | async as error">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              {{ error }}
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="btn btn-primary w-100 py-2 mb-3"
+              [disabled]="(isLoading$ | async) || loginForm.invalid">
+              <span *ngIf="isLoading$ | async" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <i class="fas fa-sign-in-alt me-2" *ngIf="!(isLoading$ | async)"></i>
+              {{ (isLoading$ | async) ? 'Signing in...' : 'Sign In' }}
+            </button>
+          </form>
+
+          <!-- Divider -->
+          <div class="text-center mb-3">
+            <span class="text-muted">or</span>
+          </div>
+
+          <!-- Social Login Buttons -->
+          <div class="d-grid gap-2 mb-4">
+            <button class="btn btn-outline-danger">
+              <i class="fab fa-google me-2"></i>Continue with Google
+            </button>
+            <button class="btn btn-outline-primary">
+              <i class="fab fa-linkedin me-2"></i>Continue with LinkedIn
+            </button>
+          </div>
+
+          <!-- Register Link -->
+          <div class="text-center">
+            <span class="text-muted">Don't have an account? </span>
+            <a href="#" class="text-decoration-none fw-semibold" (click)="goToRegister()">
+              Sign up here
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Cards -->
+      <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+          <div class="card border-primary border-2 h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-chalkboard-teacher fa-2x text-primary mb-2"></i>
+              <h6 class="card-title">For Institutions</h6>
+              <p class="card-text small text-muted">Manage courses, track student progress, and access detailed analytics.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card border-success border-2 h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-briefcase fa-2x text-success mb-2"></i>
+              <h6 class="card-title">For Companies</h6>
+              <p class="card-text small text-muted">Post jobs, review applications, and find the best talent.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

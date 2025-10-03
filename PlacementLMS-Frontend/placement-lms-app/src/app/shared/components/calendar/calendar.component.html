@@ -1,0 +1,155 @@
+<!-- Calendar Component -->
+<div class="calendar-container">
+  <!-- Calendar Header -->
+  <div class="calendar-header d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center">
+      <h4 class="mb-0 me-3">{{ getPeriodDisplay() }}</h4>
+      <button class="btn btn-sm btn-outline-primary" (click)="goToToday()" *ngIf="!isToday(selectedDate)">
+        Today
+      </button>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <!-- View Toggle -->
+      <div class="btn-group me-2" role="group">
+        <input type="radio" class="btn-check" id="monthView" [checked]="view === 'month'" (change)="view = 'month'">
+        <label class="btn btn-outline-primary btn-sm" for="monthView">Month</label>
+
+        <input type="radio" class="btn-check" id="weekView" [checked]="view === 'week'" (change)="view = 'week'">
+        <label class="btn btn-outline-primary btn-sm" for="weekView">Week</label>
+
+        <input type="radio" class="btn-check" id="dayView" [checked]="view === 'day'" (change)="view = 'day'">
+        <label class="btn btn-outline-primary btn-sm" for="dayView">Day</label>
+      </div>
+
+      <!-- Navigation -->
+      <div class="btn-group" role="group">
+        <button class="btn btn-outline-secondary btn-sm" (click)="previousPeriod()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="nextPeriod()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Month View -->
+  <div class="calendar-month" *ngIf="view === 'month'">
+    <!-- Weekday Headers -->
+    <div class="calendar-weekdays row g-0 mb-2">
+      <div class="col text-center py-2 fw-bold text-muted" *ngFor="let day of weekDays">
+        {{ day }}
+      </div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-grid">
+      <div class="calendar-week row g-0 mb-1" *ngFor="let week of getWeeks()">
+        <div class="calendar-day col text-center position-relative"
+             [class.other-month]="!day.isCurrentMonth"
+             [class.today]="day.isToday"
+             [class.selected]="isSelectedDate(day.date)"
+             *ngFor="let day of week"
+             (click)="selectDate(day.date)">
+
+          <div class="day-number">{{ day.date.getDate() }}</div>
+
+          <!-- Events -->
+          <div class="events-container">
+            <div class="event-indicator"
+                 *ngFor="let event of day.events.slice(0, 3)"
+                 [style.background-color]="getEventColor(event.type)"
+                 [title]="event.title"
+                 (click)="selectEvent(event); $event.stopPropagation()">
+              <i [class]="getEventIcon(event.type)"></i>
+            </div>
+            <div class="more-events" *ngIf="day.events.length > 3">
+              +{{ day.events.length - 3 }} more
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Week View -->
+  <div class="calendar-week-view" *ngIf="view === 'week'">
+    <div class="week-container">
+      <div class="week-day" *ngFor="let day of weekDaysData">
+        <div class="week-day-header"
+             [class.today]="day.isToday"
+             [class.selected]="isSelectedDate(day.date)"
+             (click)="selectDate(day.date)">
+          <div class="day-name">{{ weekDays[day.date.getDay()] }}</div>
+          <div class="day-number">{{ day.date.getDate() }}</div>
+        </div>
+
+        <div class="week-day-events">
+          <div class="event-item"
+               *ngFor="let event of day.events"
+               [style.border-left-color]="getEventColor(event.type)"
+               (click)="selectEvent(event)">
+            <div class="event-time" *ngIf="event.startTime">
+              {{ event.startTime }}
+            </div>
+            <div class="event-title">{{ event.title }}</div>
+            <div class="event-location" *ngIf="event.location">
+              <i class="fas fa-map-marker-alt me-1"></i>{{ event.location }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day View -->
+  <div class="calendar-day-view" *ngIf="view === 'day'">
+    <div class="day-container">
+      <div class="day-header mb-4">
+        <h5 class="mb-0">{{ selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) }}</h5>
+      </div>
+
+      <div class="day-events">
+        <div class="event-item mb-3"
+             *ngFor="let event of calendarDays[0]?.events"
+             [style.border-left-color]="getEventColor(event.type)"
+             (click)="selectEvent(event)">
+          <div class="event-header d-flex justify-content-between align-items-start">
+            <div>
+              <div class="event-title">{{ event.title }}</div>
+              <div class="event-type">
+                <i [class]="getEventIcon(event.type)"></i>
+                {{ event.type | titlecase }}
+              </div>
+            </div>
+            <div class="event-time" *ngIf="event.startTime">
+              {{ event.startTime }}
+            </div>
+          </div>
+
+          <div class="event-description" *ngIf="event.description">
+            {{ event.description }}
+          </div>
+
+          <div class="event-location" *ngIf="event.location">
+            <i class="fas fa-map-marker-alt me-1"></i>{{ event.location }}
+          </div>
+        </div>
+
+        <div class="no-events" *ngIf="calendarDays.length > 0 && (!calendarDays[0]?.events || (calendarDays[0]?.events && calendarDays[0].events.length === 0))">
+          <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+          <p class="text-muted">No events scheduled for this day</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="calendar-legend mt-3">
+    <div class="legend-item" *ngFor="let type of ['assignment', 'test', 'interview', 'deadline', 'course']">
+      <div class="legend-color" [style.background-color]="getEventColor(type)"></div>
+      <span>{{ type | titlecase }}</span>
+    </div>
+  </div>
+</div>

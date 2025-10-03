@@ -1,0 +1,259 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <div class="dashboard-actions">
+      <button class="btn-refresh" (click)="refreshData()">
+        <i class="icon-refresh"></i> Refresh
+      </button>
+      <button class="btn-realtime" (click)="toggleRealTimeUpdates()" [class.active]="realTimeUpdate">
+        <i class="icon-realtime"></i> {{ realTimeUpdate ? 'Stop' : 'Start' }} Real-time
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <div class="error-icon">⚠️</div>
+    <p>{{ error }}</p>
+    <button class="btn-retry" (click)="refreshData()">Retry</button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!loading && !error && summary" class="dashboard-content">
+    <!-- Summary Cards -->
+    <div class="summary-section">
+      <div class="summary-cards">
+        <div class="summary-card students">
+          <div class="card-icon">👥</div>
+          <div class="card-content">
+            <h3>{{ formatNumber(summary.totalStudents) }}</h3>
+            <p>Total Students</p>
+            <span class="trend-up">+{{ dashboardData?.studentAnalytics.newRegistrationsThisMonth || 0 }} this month</span>
+          </div>
+        </div>
+
+        <div class="summary-card courses">
+          <div class="card-icon">📚</div>
+          <div class="card-content">
+            <h3>{{ formatNumber(summary.totalCourses) }}</h3>
+            <p>Total Courses</p>
+            <span class="trend-up">{{ formatPercentage(dashboardData?.courseAnalytics.averageCompletionRate || 0) }} completion</span>
+          </div>
+        </div>
+
+        <div class="summary-card placements">
+          <div class="card-icon">🎯</div>
+          <div class="card-content">
+            <h3>{{ formatNumber(summary.totalPlacements) }}</h3>
+            <p>Total Placements</p>
+            <span class="trend-up" [style.color]="getPlacementRateColor()">
+              {{ formatPercentage(summary.placementRate) }} rate
+            </span>
+          </div>
+        </div>
+
+        <div class="summary-card certificates">
+          <div class="card-icon">🏆</div>
+          <div class="card-content">
+            <h3>{{ formatNumber(summary.totalCertificates) }}</h3>
+            <p>Certificates Issued</p>
+            <span class="trend-up">+{{ dashboardData?.certificateAnalytics.certificatesThisMonth || 0 }} this month</span>
+          </div>
+        </div>
+
+        <div class="summary-card companies">
+          <div class="card-icon">🏢</div>
+          <div class="card-content">
+            <h3>{{ formatNumber(summary.totalCompanies) }}</h3>
+            <p>Active Companies</p>
+            <span class="trend-neutral">{{ formatNumber(summary.totalJobOpportunities) }} job openings</span>
+          </div>
+        </div>
+
+        <div class="summary-card rating">
+          <div class="card-icon">⭐</div>
+          <div class="card-content">
+            <h3>{{ formatNumber(summary.averageCourseRating) }}</h3>
+            <p>Avg Course Rating</p>
+            <div class="rating-stars">
+              <span *ngFor="let star of getRatingStars(summary.averageCourseRating)">⭐</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+      <!-- Trend Charts -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>Student Registration Trends</h3>
+          </div>
+          <div class="chart-container">
+            <canvas *ngIf="registrationTrendData" baseChart
+                    [data]="registrationTrendData"
+                    [options]="getChartOptions('Student Registration Trends')"
+                    [type]="'line'">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>Course Enrollment Trends</h3>
+          </div>
+          <div class="chart-container">
+            <canvas *ngIf="enrollmentTrendData" baseChart
+                    [data]="enrollmentTrendData"
+                    [options]="getChartOptions('Course Enrollment Trends')"
+                    [type]="'line'">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Breakdown Charts -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>Students by Department</h3>
+          </div>
+          <div class="chart-container">
+            <canvas *ngIf="departmentBreakdownData" baseChart
+                    [data]="departmentBreakdownData"
+                    [options]="getPieChartOptions('Students by Department')"
+                    [type]="'doughnut'">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>Courses by Category</h3>
+          </div>
+          <div class="chart-container">
+            <canvas *ngIf="courseCategoryData" baseChart
+                    [data]="courseCategoryData"
+                    [options]="getPieChartOptions('Courses by Category')"
+                    [type]="'doughnut'">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placement Trends -->
+      <div class="chart-card full-width">
+        <div class="chart-header">
+          <h3>Placement Trends</h3>
+        </div>
+        <div class="chart-container">
+          <canvas *ngIf="placementTrendData" baseChart
+                  [data]="placementTrendData"
+                  [options]="getChartOptions('Placement Trends')"
+                  [type]="'bar'">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Performers Section -->
+    <div class="top-performers-section">
+      <div class="section-header">
+        <h2>Top Performers</h2>
+      </div>
+
+      <div class="performers-grid">
+        <!-- Top Courses -->
+        <div class="performer-card">
+          <h4>Top Courses</h4>
+          <div *ngIf="dashboardData?.courseAnalytics.topCourses.length === 0" class="no-data">
+            <p>No course data available</p>
+          </div>
+          <div *ngFor="let course of dashboardData?.courseAnalytics.topCourses.slice(0, 5)" class="performer-item">
+            <div class="performer-info">
+              <span class="performer-name">{{ course.courseTitle }}</span>
+              <span class="performer-stat">{{ course.enrollmentCount }} enrollments</span>
+            </div>
+            <div class="performer-rating">
+              <span class="rating-stars">
+                <span *ngFor="let star of getRatingStars(course.averageRating)">⭐</span>
+              </span>
+              <span class="rating-value">({{ formatNumber(course.averageRating) }})</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Industries -->
+        <div class="performer-card">
+          <h4>Top Industries</h4>
+          <div *ngIf="dashboardData?.placementAnalytics.topIndustries.length === 0" class="no-data">
+            <p>No industry data available</p>
+          </div>
+          <div *ngFor="let industry of dashboardData?.placementAnalytics.topIndustries.slice(0, 5)" class="performer-item">
+            <div class="performer-info">
+              <span class="performer-name">{{ industry.industry }}</span>
+              <span class="performer-stat">{{ industry.placementCount }} placements</span>
+            </div>
+            <div class="performer-salary">
+              {{ formatCurrency(industry.averageSalary) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Certificates -->
+        <div class="performer-card">
+          <h4>Recent Certificates</h4>
+          <div *ngIf="dashboardData?.certificateAnalytics.recentCertificates.length === 0" class="no-data">
+            <p>No recent certificates</p>
+          </div>
+          <div *ngFor="let cert of dashboardData?.certificateAnalytics.recentCertificates.slice(0, 5)" class="performer-item">
+            <div class="performer-info">
+              <span class="performer-name">{{ cert.studentName }}</span>
+              <span class="performer-stat">{{ cert.courseName }}</span>
+            </div>
+            <div class="performer-grade">
+              Grade: {{ cert.grade }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions-section">
+      <div class="section-header">
+        <h2>Quick Actions</h2>
+      </div>
+
+      <div class="actions-grid">
+        <button class="action-btn primary">
+          <i class="icon-plus"></i>
+          <span>Add New Course</span>
+        </button>
+
+        <button class="action-btn secondary">
+          <i class="icon-user-plus"></i>
+          <span>Register Student</span>
+        </button>
+
+        <button class="action-btn tertiary">
+          <i class="icon-file-text"></i>
+          <span>Generate Report</span>
+        </button>
+
+        <button class="action-btn quaternary">
+          <i class="icon-settings"></i>
+          <span>System Settings</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

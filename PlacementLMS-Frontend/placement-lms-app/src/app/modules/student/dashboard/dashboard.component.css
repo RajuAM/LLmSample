@@ -1,0 +1,365 @@
+/* Dashboard Styles */
+.container-fluid {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Welcome Card */
+.welcome-card {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border-radius: 0.75rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.user-stats {
+  text-align: right;
+}
+
+.stat-item {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-item strong {
+  font-size: 1.5rem;
+  display: block;
+}
+
+/* Stats Cards */
+.stat-card {
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background: white;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+.stat-card .card-body {
+  padding: 1.5rem;
+}
+
+.stat-card h4 {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.stat-card p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Course Items */
+.course-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.course-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.course-info h6 {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.course-info p {
+  margin-bottom: 0.5rem;
+}
+
+.course-actions .btn {
+  border-radius: 0.375rem;
+}
+
+/* Sidebar Cards */
+.card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 0.75rem;
+}
+
+.card-header {
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+.card-header h6 {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Quick Actions */
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-info,
+.btn-outline-warning {
+  border-width: 1px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-info:hover,
+.btn-outline-warning:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Deadline Items */
+.deadline-item {
+  padding: 0.75rem 0;
+}
+
+.deadline-item:first-child {
+  padding-top: 0;
+}
+
+.deadline-item:last-child {
+  padding-bottom: 0;
+}
+
+.deadline-icon {
+  flex-shrink: 0;
+}
+
+.deadline-info h6 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.deadline-info p {
+  margin-bottom: 0.25rem;
+}
+
+/* Application Items */
+.application-item {
+  padding: 0.75rem 0;
+}
+
+.application-item:first-child {
+  padding-top: 0;
+}
+
+.application-item:last-child {
+  padding-bottom: 0;
+}
+
+.app-icon {
+  flex-shrink: 0;
+}
+
+.app-info h6 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.app-info p {
+  margin-bottom: 0.25rem;
+}
+
+.app-status {
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+/* Achievement Section */
+.card-body {
+  padding: 2rem;
+}
+
+.card-body h5 {
+  color: #333;
+  font-weight: 600;
+}
+
+.card-body p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Progress Bars */
+.progress {
+  height: 6px;
+  background-color: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+  border-radius: 3px;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  color: #666;
+}
+
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Hover Effects */
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1rem;
+  }
+
+  .welcome-card {
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .user-stats {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .stat-card .card-body {
+    padding: 1rem;
+  }
+
+  .stat-card h4 {
+    font-size: 1.5rem;
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    margin-bottom: 1rem;
+  }
+
+  .stat-card h4 {
+    font-size: 1.25rem;
+  }
+
+  .course-item {
+    margin-bottom: 0.75rem;
+  }
+
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .course-actions {
+    text-align: center;
+  }
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .container-fluid {
+    background-color: #1a202c;
+  }
+
+  .card {
+    background-color: #2d3748;
+    color: #e2e8f0;
+  }
+
+  .card-header {
+    background-color: #2d3748;
+    border-color: #4a5568;
+  }
+
+  .card-header h6 {
+    color: #e2e8f0;
+  }
+
+  .welcome-card {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+  }
+
+  .stat-card h4 {
+    color: #e2e8f0;
+  }
+
+  .stat-card p {
+    color: #a0aec0;
+  }
+
+  .course-info h6,
+  .deadline-info h6,
+  .app-info h6 {
+    color: #e2e8f0;
+  }
+
+  .course-info p,
+  .deadline-info p,
+  .app-info p {
+    color: #a0aec0;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .btn,
+  .card-header {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+
+  .container-fluid {
+    background: white !important;
+  }
+}

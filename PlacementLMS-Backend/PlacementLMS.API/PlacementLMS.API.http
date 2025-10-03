@@ -1,0 +1,6 @@
+@PlacementLMS.API_HostAddress = http://localhost:5255
+
+GET {{PlacementLMS.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

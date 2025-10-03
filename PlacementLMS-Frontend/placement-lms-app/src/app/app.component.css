@@ -1,0 +1,119 @@
+/* App Component Styles */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+/* Ensure proper layout on all screen sizes */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+/* Cross-browser compatibility */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Keep focus for keyboard users */
+*:focus-visible {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .app-container {
+    min-height: auto;
+  }
+
+  app-header,
+  app-footer {
+    display: none !important;
+  }
+
+  .main-content {
+    padding: 0;
+    background: white;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .main-content {
+    background-color: white;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .main-content {
+    background-color: #1a202c;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content {
+    padding: 0;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  .main-content {
+    padding: 0;
+  }
+}

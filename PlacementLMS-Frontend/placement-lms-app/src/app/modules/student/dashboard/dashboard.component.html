@@ -1,0 +1,235 @@
+<!-- Student Dashboard -->
+<div class="container-fluid p-4">
+  <!-- Welcome Header -->
+  <div class="row mb-4" *ngIf="currentUser">
+    <div class="col-12">
+      <div class="welcome-card bg-primary text-white rounded-lg p-4 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h2 class="mb-2">Welcome back, {{ currentUser.firstName }}!</h2>
+            <p class="mb-0 opacity-75">Continue your learning journey and track your progress.</p>
+          </div>
+          <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <div class="user-stats">
+              <div class="stat-item mb-2">
+                <strong>{{ stats.completedCourses }}</strong>
+                <small class="ms-1">Courses Completed</small>
+              </div>
+              <div class="stat-item">
+                <strong>{{ stats.certificatesEarned }}</strong>
+                <small class="ms-1">Certificates Earned</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card stat-card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="fas fa-book fa-2x text-primary mb-2"></i>
+          <h4 class="mb-1">{{ stats.totalCourses }}</h4>
+          <p class="text-muted mb-0">Total Courses</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card stat-card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="fas fa-tasks fa-2x text-success mb-2"></i>
+          <h4 class="mb-1">{{ stats.completedAssignments }}</h4>
+          <p class="text-muted mb-0">Assignments Done</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card stat-card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+          <h4 class="mb-1">{{ stats.averageScore }}%</h4>
+          <p class="text-muted mb-0">Average Score</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card stat-card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <i class="fas fa-briefcase fa-2x text-info mb-2"></i>
+          <h4 class="mb-1">{{ stats.totalApplications }}</h4>
+          <p class="text-muted mb-0">Job Applications</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="row">
+    <!-- Recent Courses -->
+    <div class="col-lg-8 mb-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-book me-2 text-primary"></i>My Courses
+            </h5>
+            <button class="btn btn-primary btn-sm" (click)="browseCourses()">
+              <i class="fas fa-plus me-1"></i>Browse Courses
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="loading-spinner text-center py-4" *ngIf="isLoading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading your courses...</p>
+          </div>
+
+          <div class="courses-list" *ngIf="!isLoading">
+            <div class="course-item mb-3" *ngFor="let course of recentCourses">
+              <div class="d-flex justify-content-between align-items-center p-3 border rounded-lg hover-shadow">
+                <div class="course-info flex-grow-1">
+                  <h6 class="mb-1">{{ course.title }}</h6>
+                  <p class="text-muted mb-1 small">Instructor: {{ course.instructor }}</p>
+                  <div class="progress mb-2" style="height: 6px;">
+                    <div class="progress-bar {{ getProgressBarColor(course.progress) }}"
+                         role="progressbar"
+                         [style.width]="getProgressBarWidth(course.progress)">
+                    </div>
+                  </div>
+                  <small class="text-muted">{{ course.progress }}% Complete</small>
+                </div>
+                <div class="course-actions text-end">
+                  <span class="badge {{ getStatusBadgeClass(course.status) }} mb-2">{{ course.status }}</span>
+                  <button class="btn btn-outline-primary btn-sm" (click)="goToCourse(course.id)">
+                    Continue
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+      <!-- Quick Actions -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+          <h6 class="mb-0">
+            <i class="fas fa-bolt me-2 text-warning"></i>Quick Actions
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" (click)="buildResume()">
+              <i class="fas fa-file-alt me-2"></i>Build Resume
+            </button>
+            <button class="btn btn-outline-success" (click)="findJobs()">
+              <i class="fas fa-search me-2"></i>Find Jobs
+            </button>
+            <button class="btn btn-outline-info" (click)="takeMockTest()">
+              <i class="fas fa-clipboard-list me-2"></i>Take Mock Test
+            </button>
+            <button class="btn btn-outline-warning" (click)="goToAssignments()">
+              <i class="fas fa-tasks me-2"></i>View Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Deadlines -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+          <h6 class="mb-0">
+            <i class="fas fa-clock me-2 text-danger"></i>Upcoming Deadlines
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="deadline-item" *ngFor="let deadline of upcomingDeadlines">
+            <div class="d-flex align-items-start">
+              <div class="deadline-icon me-3">
+                <i class="fas" [class]="deadline.type === 'assignment' ? 'fa-tasks' : deadline.type === 'test' ? 'fa-clipboard-list' : 'fa-project-diagram'"
+                   [class.text-primary]="deadline.type === 'assignment'"
+                   [class.text-info]="deadline.type === 'test'"
+                   [class.text-warning]="deadline.type === 'project'"></i>
+              </div>
+              <div class="deadline-info flex-grow-1">
+                <h6 class="mb-1">{{ deadline.title }}</h6>
+                <p class="text-muted mb-1 small">{{ deadline.course }}</p>
+                <small class="text-danger">
+                  <i class="fas fa-calendar-alt me-1"></i>
+                  Due: {{ deadline.dueDate | date:'MMM dd, yyyy' }}
+                </small>
+              </div>
+            </div>
+            <hr *ngIf="!isLastItem(upcomingDeadlines, deadline)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Applications -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <h6 class="mb-0">
+            <i class="fas fa-briefcase me-2 text-success"></i>Recent Applications
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="application-item" *ngFor="let app of recentApplications">
+            <div class="d-flex align-items-start">
+              <div class="app-icon me-3">
+                <i class="fas fa-building text-primary"></i>
+              </div>
+              <div class="app-info flex-grow-1">
+                <h6 class="mb-1">{{ app.position }}</h6>
+                <p class="text-muted mb-1 small">{{ app.company }}</p>
+                <small class="text-muted">
+                  Applied: {{ app.appliedDate | date:'MMM dd, yyyy' }}
+                </small>
+              </div>
+              <div class="app-status">
+                <span class="badge {{ getStatusBadgeClass(app.status) }}">{{ app.status }}</span>
+              </div>
+            </div>
+            <hr *ngIf="!isLastItem(recentApplications, app)">
+          </div>
+          <div class="text-center mt-3">
+            <button class="btn btn-outline-primary btn-sm" (click)="goToApplications()">
+              View All Applications
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievement Section -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-4">
+          <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+          <h5 class="mb-2">Great Progress!</h5>
+          <p class="text-muted mb-3">
+            You've completed {{ stats.completedCourses }} courses and earned {{ stats.certificatesEarned }} certificates.
+            Keep up the excellent work!
+          </p>
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-primary" (click)="browseCourses()">
+              <i class="fas fa-plus me-2"></i>Enroll in New Course
+            </button>
+            <button class="btn btn-outline-primary" (click)="findJobs()">
+              <i class="fas fa-search me-2"></i>Explore Job Opportunities
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

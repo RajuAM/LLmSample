@@ -1,0 +1,107 @@
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid">
+    <!-- Logo/Brand -->
+    <a class="navbar-brand d-flex align-items-center" href="#" (click)="goToDashboard()">
+      <i class="fas fa-graduation-cap me-2"></i>
+      <span class="fw-bold">PlacementLMS</span>
+    </a>
+
+    <!-- Mobile menu toggle -->
+    <button class="navbar-toggler" type="button" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Menu -->
+    <div class="navbar-collapse" [class.show]="isMobileMenuOpen" *ngIf="isAuthenticated">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item" *ngFor="let item of getNavItems()">
+          <a class="nav-link" [class.active]="isActive(item.route)" [routerLink]="item.route">
+            <i [class]="item.icon" class="me-1"></i>
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- User Menu -->
+      <div class="d-flex align-items-center">
+        <!-- Notifications -->
+        <button class="btn btn-link text-white me-3 position-relative" title="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            3
+          </span>
+        </button>
+
+        <!-- User Dropdown -->
+        <div class="dropdown">
+          <button class="btn btn-link text-white dropdown-toggle d-flex align-items-center"
+                  type="button"
+                  (click)="toggleDropdown()"
+                  [attr.aria-expanded]="showDropdown">
+            <div class="user-avatar me-2">
+              {{ userInitials }}
+            </div>
+            <span class="d-none d-md-inline">{{ getUserDisplayName() }}</span>
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end" [class.show]="showDropdown">
+            <li>
+              <a class="dropdown-item" href="#" (click)="goToProfile()">
+                <i class="fas fa-user me-2"></i>Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" (click)="goToDashboard()">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger" href="#" (click)="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Navigation Menu (when collapsed) -->
+<div class="mobile-nav-overlay" [class.show]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
+<div class="mobile-nav-menu" [class.show]="isMobileMenuOpen">
+  <div class="mobile-nav-header">
+    <h5 class="mb-0">Menu</h5>
+    <button class="btn btn-link text-white" (click)="toggleMobileMenu()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="mobile-nav-body">
+    <div class="user-info mb-4">
+      <div class="user-avatar-large mb-2">
+        {{ userInitials }}
+      </div>
+      <h6 class="mb-0">{{ getUserDisplayName() }}</h6>
+      <small class="text-muted">{{ currentUser?.email }}</small>
+    </div>
+    <nav class="nav flex-column">
+      <a class="nav-link" [class.active]="isActive('/dashboard')" [routerLink]="'/dashboard'" (click)="toggleMobileMenu()">
+        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+      </a>
+      <a class="nav-link" [class.active]="isActive('/profile')" [routerLink]="'/profile'" (click)="toggleMobileMenu()">
+        <i class="fas fa-user me-2"></i>Profile
+      </a>
+      <div class="nav-section" *ngFor="let item of getNavItems()">
+        <a class="nav-link" [class.active]="isActive(item.route)" [routerLink]="item.route" (click)="toggleMobileMenu()">
+          <i [class]="item.icon" class="me-2"></i>{{ item.label }}
+        </a>
+      </div>
+      <hr class="my-3">
+      <a class="nav-link text-danger" href="#" (click)="logout()">
+        <i class="fas fa-sign-out-alt me-2"></i>Logout
+      </a>
+    </nav>
+  </div>
+</div>

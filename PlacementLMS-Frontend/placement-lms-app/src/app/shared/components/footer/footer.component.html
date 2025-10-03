@@ -1,0 +1,129 @@
+<!-- Footer -->
+<footer class="bg-dark text-light mt-5">
+  <div class="container py-5">
+    <div class="row g-4">
+      <!-- Company Info -->
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-section">
+          <h5 class="mb-3">
+            <i class="fas fa-graduation-cap me-2"></i>
+            PlacementLMS
+          </h5>
+          <p class="mb-3">
+            Empowering students with quality education and connecting them with the right career opportunities.
+          </p>
+          <div class="social-links">
+            <a *ngFor="let social of getSocialLinks()"
+               [href]="social.url"
+               target="_blank"
+               class="social-link"
+               [title]="social.name">
+              <i [class]="social.icon"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-section">
+          <h6 class="mb-3">Quick Links</h6>
+          <ul class="list-unstyled">
+            <li *ngFor="let link of getFooterLinks().quickLinks" class="mb-2">
+              <a [routerLink]="link.route" class="footer-link">
+                {{ link.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Student Links -->
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-section">
+          <h6 class="mb-3">For Students</h6>
+          <ul class="list-unstyled">
+            <li *ngFor="let link of getFooterLinks().students" class="mb-2">
+              <a [routerLink]="link.route" class="footer-link">
+                {{ link.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-section">
+          <h6 class="mb-3">Contact Us</h6>
+          <div class="contact-info">
+            <div class="mb-2">
+              <i class="fas fa-map-marker-alt me-2"></i>
+              <span>123 Education Street, Knowledge City, KC 12345</span>
+            </div>
+            <div class="mb-2">
+              <i class="fas fa-phone me-2"></i>
+              <a href="tel:+1234567890" class="footer-link">+1 (234) 567-8900</a>
+            </div>
+            <div class="mb-2">
+              <i class="fas fa-envelope me-2"></i>
+              <a href="mailto:info@placementlms.com" class="footer-link">info@placementlms.com</a>
+            </div>
+            <div class="mb-3">
+              <i class="fas fa-clock me-2"></i>
+              <span>Mon - Fri: 9:00 AM - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter Subscription -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="newsletter-section p-4 rounded bg-primary">
+          <div class="row align-items-center">
+            <div class="col-lg-8">
+              <h6 class="text-white mb-2">Stay Updated!</h6>
+              <p class="text-white-50 mb-0">
+                Subscribe to our newsletter for the latest courses, job opportunities, and educational insights.
+              </p>
+            </div>
+            <div class="col-lg-4">
+              <form class="d-flex">
+                <input type="email"
+                       class="form-control me-2"
+                       placeholder="Enter your email"
+                       aria-label="Email for newsletter">
+                <button class="btn btn-light" type="submit">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-top border-secondary">
+    <div class="container py-3">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="mb-0 text-center text-md-start">
+            © {{ currentYear }} PlacementLMS. All rights reserved.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-center justify-content-md-end">
+            <button class="btn btn-link text-light" (click)="scrollToTop()" title="Back to top">
+              <i class="fas fa-chevron-up me-1"></i>
+              Back to Top
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

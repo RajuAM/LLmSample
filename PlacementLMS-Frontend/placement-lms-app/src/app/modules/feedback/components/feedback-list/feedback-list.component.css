@@ -1,0 +1,258 @@
+.feedback-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feedback-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+}
+
+/* Filters Section */
+.filters-section {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+}
+
+.filters-section h3 {
+  margin-top: 0;
+  color: #495057;
+  font-size: 16px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.btn-clear {
+  padding: 8px 16px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-clear:hover {
+  background-color: #5a6268;
+}
+
+/* Loading and Error States */
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+}
+
+.loading p {
+  color: #007bff;
+  font-size: 16px;
+}
+
+.error p {
+  color: #dc3545;
+  font-size: 16px;
+}
+
+/* No Feedback Message */
+.no-feedback {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+}
+
+/* Feedback List */
+.feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.feedback-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.feedback-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.feedback-type {
+  background: #007bff;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.feedback-rating {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.feedback-content {
+  margin-bottom: 15px;
+}
+
+.feedback-meta {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.category {
+  background: #e9ecef;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.anonymous {
+  background: #ffc107;
+  color: #212529;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.feedback-text {
+  margin-bottom: 10px;
+}
+
+.feedback-text p {
+  margin: 0;
+  color: #495057;
+  line-height: 1.5;
+}
+
+.feedback-section {
+  margin-bottom: 10px;
+}
+
+.feedback-section strong {
+  color: #495057;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.feedback-section p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.feedback-author {
+  font-size: 14px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.feedback-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #dee2e6;
+}
+
+.btn-edit, .btn-delete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-edit {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #0056b3;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .feedback-container {
+    padding: 15px;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .feedback-meta {
+    flex-wrap: wrap;
+  }
+
+  .feedback-actions {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,173 @@
+<div class="user-management">
+  <div class="header">
+    <h2>User Management</h2>
+    <button class="btn btn-primary" (click)="toggleUserForm()">
+      <i class="fa fa-plus"></i>
+      {{ showUserForm ? 'Cancel' : 'Add New User' }}
+    </button>
+  </div>
+
+  <!-- User Form -->
+  <div class="user-form" *ngIf="showUserForm">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input type="text" id="firstName" formControlName="firstName" class="form-control">
+          <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="error">
+            First name is required and must be at least 2 characters
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input type="text" id="lastName" formControlName="lastName" class="form-control">
+          <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="error">
+            Last name is required and must be at least 2 characters
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" formControlName="email" class="form-control">
+          <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="error">
+            Valid email is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number *</label>
+          <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control">
+          <div *ngIf="userForm.get('phoneNumber')?.invalid && userForm.get('phoneNumber')?.touched" class="error">
+            Valid phone number is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="dateOfBirth">Date of Birth *</label>
+          <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="userType">User Type *</label>
+          <select id="userType" formControlName="userType" class="form-control">
+            <option value="">Select User Type</option>
+            <option *ngFor="let type of userTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address *</label>
+        <textarea id="address" formControlName="address" class="form-control" rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Roles</label>
+        <div class="checkbox-group">
+          <label *ngFor="let role of roles" class="checkbox-label">
+            <input type="checkbox" [value]="role.id" (change)="updateRoleSelection($event, role.id)">
+            {{ role.name }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" [disabled]="userForm.invalid">
+          {{ isEditing ? 'Update User' : 'Create User' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Users Table -->
+  <div class="users-table-container">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>User Type</th>
+          <th>Roles</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phoneNumber }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-admin': user.userType === 'Admin',
+              'badge-student': user.userType === 'Student',
+              'badge-institution': user.userType === 'Institution',
+              'badge-industry': user.userType === 'Industry'
+            }">
+              {{ user.userType }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let role of user.roles" class="role-badge">{{ role }}</span>
+          </td>
+          <td>
+            <span class="status-badge" [class.active]="user.isActive">
+              {{ user.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>{{ user.createdAt | date:'shortDate' }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary" (click)="editUser(user)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Role Assignment Section -->
+  <div class="role-assignment" *ngIf="users.length > 0">
+    <h3>Assign Roles to User</h3>
+    <form [formGroup]="roleAssignmentForm" (ngSubmit)="assignRoles()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="assignUser">Select User *</label>
+          <select id="assignUser" formControlName="userId" class="form-control">
+            <option value="">Select User</option>
+            <option *ngFor="let user of users" [value]="user.id">
+              {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Roles to Assign</label>
+        <div class="checkbox-group">
+          <label *ngFor="let role of roles" class="checkbox-label">
+            <input type="checkbox" [value]="role.id" (change)="updateRoleAssignment($event, role.id)">
+            {{ role.name }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-info" [disabled]="roleAssignmentForm.invalid">
+          Assign Roles
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
